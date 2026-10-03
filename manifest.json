@@ -1,0 +1,11 @@
+{
+  "name": "Today Wins 2.0",
+  "short_name": "Today Wins",
+  "description": "Small wins, every day.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101310",
+  "theme_color": "#101310",
+  "icons": [{"src":"./icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
