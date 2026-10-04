@@ -452,7 +452,7 @@
   }
 
   render();
-  // Refresh badges after user actions without observing DOM mutations.
+  // Refresh badges after user actions without observing DOM mutations. Build refresh 2026-10-04.
   document.addEventListener('click', () => window.setTimeout(render, 100));
   document.addEventListener('submit', () => window.setTimeout(render, 100));
   window.addEventListener('storage', render);
