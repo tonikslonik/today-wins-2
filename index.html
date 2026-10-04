@@ -171,49 +171,7 @@
 })();
 </script>
 <script>
-(() => {
-  const settings = document.createElement('section');
-  settings.className = 'panel';
-  settings.style.maxWidth = '1180px';
-  settings.style.margin = '20px auto';
 
-  settings.innerHTML = `
-    <div class="panel-head">
-      <div>
-        <h2>⚙️ Settings</h2>
-        <div class="sub">Customize your Today Wins experience.</div>
-      </div>
-    </div>
-
-    <label for="twLanguage">Language / Jazyk</label>
-    <select id="twLanguage" style="margin-top:8px">
-      <option value="en">English</option>
-      <option value="cs">Čeština</option>
-      <option value="es">Español</option>
-    </select>
-
-    <p class="sub" id="twLanguageMessage">
-      Language preference saved on this device.
-    </p>
-  `;
-
-  document.body.appendChild(settings);
-
-  const language = settings.querySelector('#twLanguage');
-  const savedLanguage = localStorage.getItem('tw-language') || 'en';
-
-  language.value = savedLanguage;
-
-  language.addEventListener('change', () => {
-    localStorage.setItem('tw-language', language.value);
-    settings.querySelector('#twLanguageMessage').textContent =
-      language.value === 'cs'
-        ? 'Jazyk byl uložen!'
-        : language.value === 'es'
-          ? '¡Idioma guardado!'
-          : 'Language preference saved!';
-  });
-})();
 </script>
 <script>
 (() => {
@@ -406,14 +364,8 @@
     translate(selector.value);
   });
 
-  const observer = new MutationObserver(() => {
-    translate(selector.value);
-  });
-
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
+  // Translate the page on startup and when the language selector changes.
+  // Avoid observing every DOM update, which can make the page unresponsive.
 })();
 </script><script>
 (() => {
@@ -505,5 +457,6 @@
   document.addEventListener('submit', () => window.setTimeout(render, 100));
   window.addEventListener('storage', render);
 })();
-</script></body>
-</html></body></html>
+</script>
+</body>
+</html>
