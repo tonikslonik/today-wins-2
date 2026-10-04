@@ -415,5 +415,96 @@
     subtree: true
   });
 })();
+</script><script>
+(() => {
+  'use strict';
+  const KEY = 'today-wins-2-data';
+  const section = document.createElement('section');
+  section.className = 'panel';
+  section.style.maxWidth = '1180px';
+  section.style.margin = '20px auto';
+  section.innerHTML =
+    '<div class="panel-head"><div><h2>🏆 Achievement badges</h2>' +
+    '<div class="sub">Unlock badges by showing up and making progress.</div></div>' +
+    '<span class="pill" id="twBadgeCount">0 / 8 unlocked</span></div>' +
+    '<div id="twBadgeGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px"></div>' +
+    '<div class="note">Badges are calculated from your existing progress and saved data.</div>';
+  document.body.appendChild(section);
+
+  const badges = [
+    { id: 'first', icon: '🌱', title: 'First Win', description: 'Complete your first task.', test: s => s.tasksDone >= 1 },
+    { id: 'tasks10', icon: '✅', title: 'Task Collector', description: 'Complete 10 tasks in total.', test: s => s.tasksDone >= 10 },
+    { id: 'tasks50', icon: '🏅', title: 'Task Master', description: 'Complete 50 tasks in total.', test: s => s.tasksDone >= 50 },
+    { id: 'xp100', icon: '⭐', title: 'XP Explorer', description: 'Earn 100 XP.', test: s => s.xp >= 100 },
+    { id: 'streak3', icon: '🔥', title: 'Three-Day Streak', description: 'Build a 3-day streak.', test: s => s.bestStreak >= 3 },
+    { id: 'streak7', icon: '🌟', title: 'Week Warrior', description: 'Build a 7-day streak.', test: s => s.bestStreak >= 7 },
+    { id: 'workouts5', icon: '💪', title: 'Training Rookie', description: 'Log 5 workouts in total.', test: s => s.workouts >= 5 },
+    { id: 'workouts25', icon: '🏆', title: 'Training Legend', description: 'Log 25 workouts in total.', test: s => s.workouts >= 25 }
+  ];
+
+  function getStats() {
+    let saved;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); }
+    catch (_) { saved = {}; }
+    const tasksByDate = saved.tasks && typeof saved.tasks === 'object' ? saved.tasks : {};
+    const history = saved.history && typeof saved.history === 'object' ? saved.history : {};
+    const workoutsByDate = saved.workouts && typeof saved.workouts === 'object' ? saved.workouts : {};
+    const tasksDone = Object.values(tasksByDate).reduce((sum, day) =>
+      sum + (Array.isArray(day) ? day.filter(task => task && task.done).length : 0), 0);
+    const workouts = Object.values(workoutsByDate).reduce((sum, day) =>
+      sum + (Array.isArray(day) ? day.length : 0), 0);
+    const dates = Object.keys(history).filter(date => history[date]).sort();
+    const dayNumber = date => {
+      const parts = date.split('-').map(Number);
+      return Date.UTC(parts[0], parts[1] - 1, parts[2]) / 86400000;
+    };
+    let current = 0;
+    let bestStreak = 0;
+    let previous = null;
+    dates.forEach(date => {
+      current = previous !== null && dayNumber(date) - dayNumber(previous) === 1 ? current + 1 : 1;
+      bestStreak = Math.max(bestStreak, current);
+      previous = date;
+    });
+    return { tasksDone, workouts, xp: Number(saved.xp) || 0, bestStreak };
+  }
+
+  function render() {
+    const stats = getStats();
+    let unlocked = 0;
+    const grid = section.querySelector('#twBadgeGrid');
+    grid.innerHTML = '';
+    badges.forEach(badge => {
+      const earned = badge.test(stats);
+      if (earned) unlocked++;
+      const card = document.createElement('div');
+      card.style.cssText = 'border:1px solid ' + (earned ? '#536d42' : '#29382b') +
+        ';background:' + (earned ? '#1b2a19' : '#0e160f') +
+        ';border-radius:15px;padding:13px;text-align:center;min-width:0';
+      const icon = document.createElement('div');
+      icon.textContent = earned ? badge.icon : '🔒';
+      icon.style.cssText = 'font-size:27px;margin-bottom:7px;filter:' + (earned ? 'none' : 'grayscale(1)') + ';';
+      const title = document.createElement('div');
+      title.textContent = badge.title;
+      title.style.cssText = 'font-size:13px;font-weight:800;color:' + (earned ? '#d7f7ad' : '#9cac9d') + ';';
+      const desc = document.createElement('div');
+      desc.textContent = badge.description;
+      desc.style.cssText = 'font-size:11px;color:#9cac9d;margin-top:5px;';
+      const status = document.createElement('div');
+      status.textContent = earned ? 'UNLOCKED' : 'LOCKED';
+      status.style.cssText = 'font-size:9px;font-weight:800;letter-spacing:1px;margin-top:9px;color:' + (earned ? '#b8f36b' : '#7b877b') + ';';
+      card.append(icon, title, desc, status);
+      grid.appendChild(card);
+    });
+    section.querySelector('#twBadgeCount').textContent = unlocked + ' / ' + badges.length + ' unlocked';
+  }
+
+  render();
+  ['taskList', 'workoutList', 'xpStat', 'streakStat'].forEach(id => {
+    const target = document.getElementById(id);
+    if (target) new MutationObserver(render).observe(target, { childList: true, subtree: true, characterData: true });
+  });
+  window.addEventListener('storage', render);
+})();
 </script></body>
 </html></body></html>
