@@ -214,5 +214,206 @@
           : 'Language preference saved!';
   });
 })();
+</script>
+<script>
+(() => {
+  const translations = {
+    cs: {
+      "Your daily dashboard": "Tvůj denní přehled",
+      "Small wins.": "Malé úspěchy.",
+      "Stronger you.": "Silnější ty.",
+      "Track your effort, fuel, and recovery — one day at a time.": "Sleduj své úsilí, jídlo a regeneraci — den po dni.",
+      "Tasks done": "Hotové úkoly",
+      "Daily progress": "Denní pokrok",
+      "Current streak": "Aktuální série",
+      "days": "dní",
+      "Total XP": "Celkové XP",
+      "Today": "Dnes",
+      "Recovery": "Regenerace",
+      "Food & water": "Jídlo a voda",
+      "Training log": "Tréninkový deník",
+      "Today's tasks": "Dnešní úkoly",
+      "Every completed task is a small win.": "Každý splněný úkol se počítá.",
+      "Add a task for today...": "Přidej dnešní úkol...",
+      "＋ Add task": "＋ Přidat úkol",
+      "complete": "splněno",
+      "complete": "splněno",
+      "Training log": "Tréninkový deník",
+      "Record what you did, not just what you planned.": "Zaznamenej, co jsi udělal, nejen co jsi plánoval.",
+      "Minutes": "Minuty",
+      "Notes (optional): what did you work on?": "Poznámka (volitelné): na čem jsi pracoval?",
+      "＋ Log workout": "＋ Zapsat trénink",
+      "Today's sessions": "Dnešní tréninky",
+      "Total training time today": "Celkový čas tréninku dnes",
+      "Food & hydration": "Jídlo a pitný režim",
+      "Keep a simple record of meals and water.": "Jednoduše si zapisuj jídlo a vodu.",
+      "Water today": "Dnešní voda",
+      "＋ Add glass": "＋ Přidat sklenici",
+      "− Remove": "− Odebrat",
+      "Breakfast": "Snídaně",
+      "Lunch": "Oběd",
+      "Dinner": "Večeře",
+      "Snack": "Svačina",
+      "What did you eat?": "Co jsi jedl?",
+      "Optional note (e.g. homemade, before training)": "Volitelná poznámka",
+      "＋ Add meal": "＋ Přidat jídlo",
+      "Today's meals": "Dnešní jídla",
+      "This is a simple food journal, not a diet or calorie target.": "Tohle je jednoduchý jídelní deník, ne dieta ani kalorický cíl.",
+      "Recovery check-in": "Kontrola regenerace",
+      "How ready do you feel today?": "Jak se dnes cítíš?",
+      "Ready to go": "Připraven do akce",
+      "Based on your check-in": "Podle tvého hodnocení",
+      "Sleep last night": "Včerejší spánek",
+      "Energy level": "Úroveň energie",
+      "Muscle soreness": "Svalová únava",
+      "Save check-in": "Uložit hodnocení",
+      "Use this as a reflection tool, not medical advice. Rest when you need it.": "Použij to k zamyšlení, ne jako lékařskou radu. Odpočívej, když potřebuješ.",
+      "Your streak": "Tvoje série",
+      "Keep showing up, one day at a time.": "Pokračuj den po dni.",
+      "Build your better days": "Vytvářej lepší dny",
+      "Settings": "Nastavení",
+      "Language / Jazyk": "Jazyk",
+      "Customize your Today Wins experience.": "Přizpůsob si Today Wins.",
+      "Language preference saved on this device.": "Volba jazyka je uložená v tomto zařízení.",
+      "Task added. Let’s make it count.": "Úkol přidán. Ať se počítá!",
+      "Export Backup": "Exportovat zálohu",
+      "Import Backup": "Importovat zálohu",
+      "Data & Backup": "Data a záloha"
+    },
+    es: {
+      "Your daily dashboard": "Tu panel diario",
+      "Small wins.": "Pequeños logros.",
+      "Stronger you.": "Una versión más fuerte de ti.",
+      "Track your effort, fuel, and recovery — one day at a time.": "Sigue tu esfuerzo, alimentación y recuperación día a día.",
+      "Tasks done": "Tareas completadas",
+      "Daily progress": "Progreso diario",
+      "Current streak": "Racha actual",
+      "days": "días",
+      "Total XP": "XP total",
+      "Today": "Hoy",
+      "Recovery": "Recuperación",
+      "Food & water": "Comida y agua",
+      "Training log": "Registro de entrenamiento",
+      "Today's tasks": "Tareas de hoy",
+      "Every completed task is a small win.": "Cada tarea completada cuenta.",
+      "Add a task for today...": "Añade una tarea para hoy...",
+      "＋ Add task": "＋ Añadir tarea",
+      "Record what you did, not just what you planned.": "Registra lo que hiciste, no solo lo que planeaste.",
+      "Minutes": "Minutos",
+      "＋ Log workout": "＋ Registrar entrenamiento",
+      "Today's sessions": "Sesiones de hoy",
+      "Total training time today": "Tiempo total de entrenamiento hoy",
+      "Food & hydration": "Comida e hidratación",
+      "Keep a simple record of meals and water.": "Registra tus comidas y el agua que bebes.",
+      "Water today": "Agua de hoy",
+      "＋ Add glass": "＋ Añadir vaso",
+      "− Remove": "− Quitar",
+      "Breakfast": "Desayuno",
+      "Lunch": "Almuerzo",
+      "Dinner": "Cena",
+      "Snack": "Tentempié",
+      "What did you eat?": "¿Qué has comido?",
+      "＋ Add meal": "＋ Añadir comida",
+      "Today's meals": "Comidas de hoy",
+      "Recovery check-in": "Control de recuperación",
+      "How ready do you feel today?": "¿Cómo te sientes hoy?",
+      "Ready to go": "Listo para empezar",
+      "Sleep last night": "Sueño de anoche",
+      "Energy level": "Nivel de energía",
+      "Muscle soreness": "Dolor muscular",
+      "Save check-in": "Guardar evaluación",
+      "Your streak": "Tu racha",
+      "Keep showing up, one day at a time.": "Sigue adelante, día a día.",
+      "Build your better days": "Construye días mejores",
+      "Settings": "Ajustes",
+      "Language / Jazyk": "Idioma",
+      "Customize your Today Wins experience.": "Personaliza tu experiencia Today Wins.",
+      "Language preference saved on this device.": "Idioma guardado en este dispositivo.",
+      "Export Backup": "Exportar copia",
+      "Import Backup": "Importar copia",
+      "Data & Backup": "Datos y copia de seguridad"
+    }
+  };
+
+  const originalTexts = new WeakMap();
+  const originalAttributes = new WeakMap();
+
+  function translate(language) {
+    const dictionary = translations[language] || {};
+
+    function visit(root) {
+      const walker = document.createTreeWalker(
+        root,
+        NodeFilter.SHOW_TEXT
+      );
+
+      let node;
+      while ((node = walker.nextNode())) {
+        if (!originalTexts.has(node)) {
+          originalTexts.set(node, node.nodeValue);
+        }
+
+        const original = originalTexts.get(node);
+        const trimmed = original.trim();
+
+        if (dictionary[trimmed]) {
+          node.nodeValue = original.replace(
+            trimmed,
+            dictionary[trimmed]
+          );
+        } else {
+          node.nodeValue = original;
+        }
+      }
+
+      root.querySelectorAll(
+        'input[placeholder], textarea[placeholder], button[aria-label], label'
+      ).forEach(element => {
+        if (!originalAttributes.has(element)) {
+          originalAttributes.set(element, {
+            placeholder: element.getAttribute('placeholder'),
+            ariaLabel: element.getAttribute('aria-label')
+          });
+        }
+
+        const original = originalAttributes.get(element);
+
+        ['placeholder', 'ariaLabel'].forEach(key => {
+          const attribute = key === 'ariaLabel' ? 'aria-label' : key;
+          const value = original[key];
+          if (value !== null && value !== undefined) {
+            element.setAttribute(
+              attribute,
+              dictionary[value] || value
+            );
+          }
+        });
+      });
+    }
+
+    visit(document.body);
+  }
+
+  const selector = document.querySelector('#twLanguage');
+  if (!selector) return;
+
+  const saved = localStorage.getItem('tw-language') || 'en';
+  selector.value = saved;
+  translate(saved);
+
+  selector.addEventListener('change', () => {
+    localStorage.setItem('tw-language', selector.value);
+    translate(selector.value);
+  });
+
+  const observer = new MutationObserver(() => {
+    translate(selector.value);
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+})();
 </script></body>
 </html></body></html>
