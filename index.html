@@ -500,10 +500,9 @@
   }
 
   render();
-  ['taskList', 'workoutList', 'xpStat', 'streakStat'].forEach(id => {
-    const target = document.getElementById(id);
-    if (target) new MutationObserver(render).observe(target, { childList: true, subtree: true, characterData: true });
-  });
+  // Refresh badges after user actions without observing DOM mutations.
+  document.addEventListener('click', () => window.setTimeout(render, 100));
+  document.addEventListener('submit', () => window.setTimeout(render, 100));
   window.addEventListener('storage', render);
 })();
 </script></body>
