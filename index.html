@@ -458,5 +458,159 @@
   window.addEventListener('storage', render);
 })();
 </script>
+
+<!-- TODAY WINS MONTHLY PLAN -->
+<section class="panel" id="monthlyPlanPanel" style="max-width:1180px;margin:20px auto">
+  <div class="panel-head">
+    <div>
+      <h2>📅 Monthly Plan</h2>
+      <div class="sub">Set your monthly activity goals and track your progress.</div>
+    </div>
+    <span class="pill" id="twMonthLabel"></span>
+  </div>
+  <form id="twPlanForm" class="formgrid">
+    <select id="twPlanType">
+      <option>Workout</option>
+      <option>Cycling</option>
+      <option>Swimming</option>
+      <option>Running</option>
+      <option>Basketball</option>
+      <option>Mobility</option>
+      <option>Other</option>
+    </select>
+    <input class="field" id="twPlanTarget" type="number" min="1" max="100" value="8" placeholder="Target sessions">
+    <button class="btn wide" type="submit">＋ Add to monthly plan</button>
+  </form>
+  <div id="twPlanList" style="margin-top:16px"></div>
+  <div class="note">Progress is counted automatically from workouts you log during the current month.</div>
+</section>
+
+<script>
+(() => {
+  'use strict';
+  const PLAN_KEY = 'today-wins-2-monthly-plan';
+  const DATA_KEY = 'today-wins-2-data';
+  const panel = document.getElementById('monthlyPlanPanel');
+  if (!panel) return;
+
+  const monthKey = () => {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+  };
+  const monthName = () => new Date().toLocaleDateString(undefined, {month:'long', year:'numeric'});
+
+  let plans = {};
+  try { plans = JSON.parse(localStorage.getItem(PLAN_KEY) || '{}'); } catch (_) { plans = {}; }
+  const month = monthKey();
+  if (!Array.isArray(plans[month])) plans[month] = [];
+
+  const save = () => localStorage.setItem(PLAN_KEY, JSON.stringify(plans));
+
+  function getMonthlyCounts() {
+    let data = {};
+    try { data = JSON.parse(localStorage.getItem(DATA_KEY) || '{}'); } catch (_) { data = {}; }
+    const workouts = data.workouts && typeof data.workouts === 'object' ? data.workouts : {};
+    const counts = {};
+    Object.keys(workouts).forEach(date => {
+      if (!date.startsWith(month) || !Array.isArray(workouts[date])) return;
+      workouts[date].forEach(w => {
+        if (!w || !w.type) return;
+        const type = String(w.type);
+        counts[type] = (counts[type] || 0) + 1;
+      });
+    });
+    return counts;
+  }
+
+  function render() {
+    panel.querySelector('#twMonthLabel').textContent = monthName();
+    const list = panel.querySelector('#twPlanList');
+    list.innerHTML = '';
+    const counts = getMonthlyCounts();
+
+    if (!plans[month].length) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = 'No monthly goals yet. Add your first activity above.';
+      list.appendChild(empty);
+      return;
+    }
+
+    plans[month].forEach((plan, index) => {
+      const done = Math.min(counts[plan.type] || 0, plan.target);
+      const percent = Math.min(100, Math.round(done / plan.target * 100));
+      const row = document.createElement('div');
+      row.style.cssText = 'border:1px solid var(--line);background:#0e160f;border-radius:15px;padding:14px;margin-top:10px';
+
+      const head = document.createElement('div');
+      head.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:10px';
+
+      const title = document.createElement('strong');
+      title.textContent = plan.type;
+
+      const meta = document.createElement('span');
+      meta.className = 'small-muted';
+      meta.textContent = done + ' / ' + plan.target + ' sessions';
+
+      const remove = document.createElement('button');
+      remove.className = 'delete';
+      remove.type = 'button';
+      remove.textContent = '×';
+      remove.title = 'Remove goal';
+      remove.addEventListener('click', () => {
+        plans[month].splice(index, 1);
+        save();
+        render();
+      });
+
+      head.append(title, meta, remove);
+
+      const track = document.createElement('div');
+      track.className = 'progress-track';
+      const fill = document.createElement('div');
+      fill.className = 'progress-fill';
+      fill.style.width = percent + '%';
+      track.appendChild(fill);
+
+      const footer = document.createElement('div');
+      footer.className = 'xp-line';
+      const left = document.createElement('span');
+      left.textContent = percent + '% complete';
+      const right = document.createElement('span');
+      right.textContent = done >= plan.target ? '✓ Goal reached' : (plan.target - done) + ' to go';
+      footer.append(left, right);
+
+      row.append(head, track, footer);
+      list.appendChild(row);
+    });
+  }
+
+  panel.querySelector('#twPlanForm').addEventListener('submit', event => {
+    event.preventDefault();
+    const type = panel.querySelector('#twPlanType').value;
+    const target = Number(panel.querySelector('#twPlanTarget').value);
+    if (!type || !Number.isFinite(target) || target < 1) return;
+
+    const existing = plans[month].find(p => p.type === type);
+    if (existing) {
+      existing.target = target;
+    } else {
+      plans[month].push({type, target});
+    }
+    save();
+    render();
+  });
+
+  window.addEventListener('storage', render);
+  document.addEventListener('submit', event => {
+    if (event.target && event.target.id === 'workoutForm') {
+      window.setTimeout(render, 150);
+    }
+  });
+
+  render();
+})();
+</script>
+
 </body>
 </html>
